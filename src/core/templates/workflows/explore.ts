@@ -13,7 +13,9 @@ export function getExploreSkillTemplate(): SkillTemplate {
     description: 'Enter explore mode - a thinking partner for exploring ideas, investigating problems, and clarifying requirements. Use when the user wants to think through something before or during a change.',
     instructions: `Enter explore mode. Think deeply. Visualize freely. Follow the conversation wherever it goes.
 
-**IMPORTANT: Explore mode is for thinking, not implementing.** You may read files, search code, and investigate the codebase, but you must NEVER write code or implement features. If the user asks you to implement something, remind them to exit explore mode first and create a change proposal. You MAY create OpenSpec artifacts (proposals, designs, specs) if the user asks—that's capturing thinking, not implementing. For a new change, scaffold it first as described below.
+**IMPORTANT: Explore mode is for thinking, not implementing.** You may read files, search code, and investigate the codebase, but you must NEVER write code or implement features. If the user asks you to implement something, remind them to exit explore mode first and create a change proposal. Do not implement in this conversation even if they say "fix it." You MAY create OpenSpec artifacts (proposals, designs, specs) if the user asks—that's capturing thinking, not implementing. For a new change, scaffold it first as described below.
+
+Do not run the test suite, linters, or the app in a loop. A single command is enough to understand a failure. If a shell command already completed, do not run it again — repeating \`pytest\`, \`python -c\`, grep, or ls is a loop: stop and use the previous result. After you have answered, stop. Do not invoke apply, archive, or sync from explore.
 
 **This is a stance, not a workflow.** There are no fixed steps, no required sequence, no mandatory outputs. You're a thinking partner helping the user explore.
 
@@ -298,7 +300,10 @@ But this summary is optional. Sometimes the thinking IS the value.
 
 ## Guardrails
 
-- **Don't implement** - Never write code or implement features. Creating OpenSpec artifacts is fine, writing application code is not.
+- **Don't implement** - Never write code or implement features. Creating OpenSpec artifacts is fine, writing application code is not. Do not implement even if the user says "fix it" — remind them to exit explore first.
+- **Don't rerun commands** - If a shell command already completed, do not run it again. Repeating \`pytest\`, \`python -c\`, grep, or ls is a loop: stop and use the previous result.
+- **Don't start other workflows** - Do not invoke apply, archive, or sync from explore
+- **Stop after answering** - Once you have explained the issue or offered next steps, wait for the user
 - **Don't fake understanding** - If something is unclear, dig deeper
 - **Don't rush** - Discovery is thinking time, not task time
 - **Don't force structure** - Let patterns emerge naturally
@@ -321,7 +326,9 @@ export function getOpsxExploreCommandTemplate(): CommandTemplate {
     tags: ['workflow', 'explore', 'experimental', 'thinking'],
     content: `Enter explore mode. Think deeply. Visualize freely. Follow the conversation wherever it goes.
 
-**IMPORTANT: Explore mode is for thinking, not implementing.** You may read files, search code, and investigate the codebase, but you must NEVER write code or implement features. If the user asks you to implement something, remind them to exit explore mode first and create a change proposal. You MAY create OpenSpec artifacts (proposals, designs, specs) if the user asks—that's capturing thinking, not implementing. For a new change, scaffold it first as described below.
+**IMPORTANT: Explore mode is for thinking, not implementing.** You may read files, search code, and investigate the codebase, but you must NEVER write code or implement features. If the user asks you to implement something, remind them to exit explore mode first and create a change proposal. Do not implement in this conversation even if they say "fix it." You MAY create OpenSpec artifacts (proposals, designs, specs) if the user asks—that's capturing thinking, not implementing. For a new change, scaffold it first as described below.
+
+Do not run the test suite, linters, or the app in a loop. A single command is enough to understand a failure. If a shell command already completed, do not run it again — repeating \`pytest\`, \`python -c\`, grep, or ls is a loop: stop and use the previous result. After you have answered, stop. Do not invoke apply, archive, or sync from explore.
 
 **This is a stance, not a workflow.** There are no fixed steps, no required sequence, no mandatory outputs. You're a thinking partner helping the user explore.
 
@@ -495,7 +502,10 @@ When things crystallize, you might offer a summary - but it's optional. Sometime
 
 ## Guardrails
 
-- **Don't implement** - Never write code or implement features. Creating OpenSpec artifacts is fine, writing application code is not.
+- **Don't implement** - Never write code or implement features. Creating OpenSpec artifacts is fine, writing application code is not. Do not implement even if the user says "fix it" — remind them to exit explore first.
+- **Don't rerun commands** - If a shell command already completed, do not run it again. Repeating \`pytest\`, \`python -c\`, grep, or ls is a loop: stop and use the previous result.
+- **Don't start other workflows** - Do not invoke apply, archive, or sync from explore
+- **Stop after answering** - Once you have explained the issue or offered next steps, wait for the user
 - **Don't fake understanding** - If something is unclear, dig deeper
 - **Don't rush** - Discovery is thinking time, not task time
 - **Don't force structure** - Let patterns emerge naturally

@@ -807,6 +807,7 @@ apply:
       expect(result.stdout).toContain('work through pending tasks');
       expect(result.stdout).toContain('the next tool call MUST edit the tasks file');
       expect(result.stdout).toContain('Cycling the same two or more files');
+      expect(result.stdout).toContain('Repeating the same shell command after it already completed is a loop');
     });
 
     it('shows all_done state when all tasks are complete', async () => {

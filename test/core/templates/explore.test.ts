@@ -30,6 +30,15 @@ function occurrenceCount(body: string, value: string): number {
 }
 
 describe('explore templates', () => {
+  it('does not rerun shell commands or start apply from explore', () => {
+    for (const [label, body] of bodies) {
+      expect(body, label).toContain('repeating `pytest`, `python -c`, grep, or ls is a loop');
+      expect(body, label).toContain('Do not implement in this conversation even if they say "fix it."');
+      expect(body, label).toContain('Do not invoke apply, archive, or sync from explore');
+      expect(body, label).toContain("Don't rerun commands");
+      expect(body, label).toContain('Stop after answering');
+    }
+  });
   // Regression for #696: explore never loaded the project's declared
   // context, so it reasoned without the tech stack, conventions, and
   // rules every artifact-creating workflow already receives.

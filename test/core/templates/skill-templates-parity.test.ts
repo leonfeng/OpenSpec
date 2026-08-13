@@ -38,17 +38,17 @@ import {
 import { STORE_SELECTION_GUIDANCE } from '../../../src/core/templates/workflows/store-selection.js';
 
 const EXPECTED_FUNCTION_HASHES: Record<string, string> = {
-  getExploreSkillTemplate: '3efc37cddf342318ac37be7bb4ff5915f454b4c5bb127294ebdc7534ee21aa23',
+  getExploreSkillTemplate: '4586058b0de3ea0b262c0e8cd97322ab6c729039c4baabf341f277352ba6d17c',
   getNewChangeSkillTemplate: 'eabd1e895c5881dcb17dcbaa3fb26098dd59e8eacb318e400820b4dc811ef781',
   getContinueChangeSkillTemplate: '012136f6411a99c8fa228e2f9444cb64b0a89e0f56fdeac2fe03b2f5bee0c5d7',
-  getApplyChangeSkillTemplate: '0d74d939c60c85724a06f7918f6186e92c4e1596b6b7490552e216646c2e711e',
+  getApplyChangeSkillTemplate: '51993f018078d082b35c3cc24a6f96feaec19b34389e3f7c0080c9ce2db7a314',
   getFfChangeSkillTemplate: '5501740e7ec36ab23ab8c3a0d6dd0655a5e2f35433c7b90e82904fef5e7a326a',
   getSyncSpecsSkillTemplate: 'b099e2ff31859c9b10d928066e662524f9aad9ecf2be12fceacb732d718c4146',
   getOnboardSkillTemplate: '29b1d825179cff92fbc7b790694c1baef138575ea3de56848715e27d7e367946',
-  getOpsxExploreCommandTemplate: 'd2f70d11588f902c15c1e5ce9908cc4124c6b82fe78dc766ac5c3599c9e2a6f1',
+  getOpsxExploreCommandTemplate: 'd5a2e340686469dfd40e32443f595f4d2e9557493b9b265ca7a749c065cdd7df',
   getOpsxNewCommandTemplate: 'f2d30e569798a4c92ba932859d6ba4e0ad10e18feccbade1cfee0957597b3463',
   getOpsxContinueCommandTemplate: 'e50e50266efa1b8e64ff9b6274ee8254f0a240d6adc1b862d126e2f1c9d3a559',
-  getOpsxApplyCommandTemplate: '04b6a14d2d7edeb41b42f85297690a79e586b32496ca8672b46434bea3cc0dec',
+  getOpsxApplyCommandTemplate: 'cb7129cf1c1d8ee7b720eae733413fad14d036596aba8e87a26ecb643aa42905',
   getOpsxFfCommandTemplate: 'e603bc0996604e6c17a3140943ea642a32d0fc65565e25424bf956e124c55772',
   getArchiveChangeSkillTemplate: '30d7d7efb59edad25ab67e9e1ce88068d1561d26da0f45715311c3bbdd029b03',
   getBulkArchiveChangeSkillTemplate: '62359645591c4d274b13a99e5aea14e7ae8fa0be356582f085a58d20d4bfbd0b',
@@ -66,10 +66,10 @@ const EXPECTED_FUNCTION_HASHES: Record<string, string> = {
 };
 
 const EXPECTED_GENERATED_SKILL_CONTENT_HASHES: Record<string, string> = {
-  'openspec-explore': '4d9736372cc1faf8a5d8a66395a95bf77b9f3fcd2cda40411ad1db6927e8066a',
+  'openspec-explore': '403413f0e5f0bf45596d205a19cbddb4d92bd82b124ab5c75e985e524aba1dcf',
   'openspec-new-change': 'ec4529beef978e34634a6f7286fab55d68fad8fb374dceb45691d52caab33fbb',
   'openspec-continue-change': 'bb6194a16c54891cdb253678e8f70ce53b2af86735243980f366ce551d37e42e',
-  'openspec-apply-change': 'a826fb1bbed0e2840d0edcac85a9d836bd9d42e23309aecf755ba5b7cf4470ca',
+  'openspec-apply-change': '79089ea79386c7f7b50f29518c46d3ee357e27274d5ccb41bf984aa5d66c667c',
   'openspec-ff-change': '217c78da2b6e8358f609ac57dcd02266aaec3354ce26dc6ec2fc9c2174673ab4',
   'openspec-sync-specs': 'd933d8856584d6c1253de91e652e7aee9e85c77ad4d3531f6476f79d84e6e5e8',
   'openspec-archive-change': 'fcd1a14c787837763e0f7826bf59db993271bc56f5459e0c2e302cc801d2e794',
