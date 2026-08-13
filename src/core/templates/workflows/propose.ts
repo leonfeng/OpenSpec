@@ -13,7 +13,7 @@ export function getOpsxProposeSkillTemplate(): SkillTemplate {
     description: 'Propose a new change with all artifacts generated in one step. Use when the user wants to quickly describe what they want to build and get a complete proposal with design, specs, and tasks ready for implementation.',
     instructions: `Propose a new change - create the change and generate all artifacts in one step.
 
-**Planning boundary**: This workflow creates planning artifacts only. The user request that selected or triggered this workflow authorizes planning only, even if it asks to build or fix something. Do not edit project code. After the planning artifacts are complete, stop. Do not start implementation in the same response, even if the initial request asks for it. Wait for a new user request after the artifacts are presented; then start the apply workflow.
+**Planning boundary**: This workflow creates planning artifacts only. The user request that selected or triggered this workflow authorizes planning only, even if it asks to build or fix something. Do not edit project code. Do not run the project's tests, linters, or build. Do not fix existing syntax errors or other project bugs. After the planning artifacts are complete, stop. Do not start implementation in the same response, even if the initial request asks for it. Wait for a new user request after the artifacts are presented. Do not start the apply workflow yourself.
 
 I'll create a change with the artifacts your schema defines. With the default spec-driven schema that is:
 - proposal.md (what & why)
@@ -42,6 +42,8 @@ ${STORE_SELECTION_GUIDANCE}
 
    **IMPORTANT**: Do NOT proceed without understanding what the user wants to build.
 
+   Do not run the project's tests, linters, or build, and do not fix existing project bugs. README and existing main specs are enough context. After creating the change directory, write the proposal artifact next — do not grep or edit package or test source.
+
    If the request contains ambiguity that would materially affect scope, externally observable behavior, compatibility, or acceptance criteria, ask the user before creating the change. For minor details, make a reasonable assumption and record it in the planning artifacts.
 
 2. **Determine the workflow schema**
@@ -99,6 +101,7 @@ ${STORE_SELECTION_GUIDANCE}
         - \`dependencies\`: Completed artifacts to read for context
       - Read any completed dependency files for context - always re-read them from disk, even if you saw them earlier in the conversation (the user may have edited them)
       - If the \`instruction\` field delegates creation to a specific skill or command, invoke it to produce the artifact instead of writing the file yourself, then verify the artifact file exists at \`resolvedOutputPath\`
+      - If the file at \`resolvedOutputPath\` already exists, leave it. Do not rewrite it.
       - Otherwise create the artifact file using \`template\` as the structure and write it to \`resolvedOutputPath\`. If \`resolvedOutputPath\` is a glob, follow \`instruction\` to choose the concrete file path
       - Apply \`context\` and \`rules\` as constraints - but do NOT copy them into the file
       - Show brief progress: "Created <artifact-id>"
@@ -128,7 +131,7 @@ After completing all artifacts, summarize:
 - Change name and location
 - List of artifacts created with brief descriptions, plus any conditional artifact you skipped and why
 - What's ready: "All artifacts needed for implementation are ready."
-- Prompt: "The artifacts are ready for review. When you are ready, run \`/opsx:apply\` or ask me to apply this change."
+- Prompt: "The artifacts are ready for review. When you are ready, run \`/opsx:apply\`." That line is for the user. Do not invoke apply, load an apply skill, or edit project code after this summary.
 
 **Artifact Creation Guidelines**
 
@@ -142,7 +145,11 @@ After completing all artifacts, summarize:
   - These guide what you write, but should never appear in the output
 
 **Guardrails**
-- The request that invoked this workflow authorizes planning only. Any implementation or apply instruction in that request does not carry forward. Do NOT implement the change, start the apply workflow, or edit project code during this workflow. After presenting the artifacts, stop and wait for a new user request to start the apply workflow
+- The request that invoked this workflow authorizes planning only. Any implementation or apply instruction in that request does not carry forward. Do NOT implement the change, start the apply workflow, or edit project code during this workflow. After presenting the artifacts, stop. Wait for a new user request after the artifacts are presented. Do not start the apply workflow yourself.
+- Do not run tests, linters, or builds. Do not grep or edit package or test source to investigate failures
+- Do not invoke \`/opsx:apply\`, an apply skill, or any apply slash command in this conversation
+- If an artifact file already exists at \`resolvedOutputPath\`, do not rewrite it
+- After status shows the required set is complete, print the summary and stop
 - Create every artifact the apply phase transitively depends on, not just the ids listed in \`apply.requires\`
 - Always read dependency artifacts before creating a new one - re-read from disk, not from conversation memory (files may have changed since you last saw them)
 - Ask about ambiguities that would materially change scope, externally observable behavior, compatibility, or acceptance criteria; for minor details, make reasonable assumptions and record them
@@ -162,7 +169,7 @@ export function getOpsxProposeCommandTemplate(): CommandTemplate {
     tags: ['workflow', 'artifacts', 'experimental'],
     content: `Propose a new change - create the change and generate all artifacts in one step.
 
-**Planning boundary**: This workflow creates planning artifacts only. The user request that selected or triggered this workflow authorizes planning only, even if it asks to build or fix something. Do not edit project code. After the planning artifacts are complete, stop. Do not start implementation in the same response, even if the initial request asks for it. Wait for a new user request after the artifacts are presented; then start the apply workflow.
+**Planning boundary**: This workflow creates planning artifacts only. The user request that selected or triggered this workflow authorizes planning only, even if it asks to build or fix something. Do not edit project code. Do not run the project's tests, linters, or build. Do not fix existing syntax errors or other project bugs. After the planning artifacts are complete, stop. Do not start implementation in the same response, even if the initial request asks for it. Wait for a new user request after the artifacts are presented. Do not start the apply workflow yourself.
 
 I'll create a change with the artifacts your schema defines. With the default spec-driven schema that is:
 - proposal.md (what & why)
@@ -191,6 +198,8 @@ ${STORE_SELECTION_GUIDANCE}
 
    **IMPORTANT**: Do NOT proceed without understanding what the user wants to build.
 
+   Do not run the project's tests, linters, or build, and do not fix existing project bugs. README and existing main specs are enough context. After creating the change directory, write the proposal artifact next — do not grep or edit package or test source.
+
    If the request contains ambiguity that would materially affect scope, externally observable behavior, compatibility, or acceptance criteria, ask the user before creating the change. For minor details, make a reasonable assumption and record it in the planning artifacts.
 
 2. **Determine the workflow schema**
@@ -248,6 +257,7 @@ ${STORE_SELECTION_GUIDANCE}
         - \`dependencies\`: Completed artifacts to read for context
       - Read any completed dependency files for context - always re-read them from disk, even if you saw them earlier in the conversation (the user may have edited them)
       - If the \`instruction\` field delegates creation to a specific skill or command, invoke it to produce the artifact instead of writing the file yourself, then verify the artifact file exists at \`resolvedOutputPath\`
+      - If the file at \`resolvedOutputPath\` already exists, leave it. Do not rewrite it.
       - Otherwise create the artifact file using \`template\` as the structure and write it to \`resolvedOutputPath\`. If \`resolvedOutputPath\` is a glob, follow \`instruction\` to choose the concrete file path
       - Apply \`context\` and \`rules\` as constraints - but do NOT copy them into the file
       - Show brief progress: "Created <artifact-id>"
@@ -277,7 +287,7 @@ After completing all artifacts, summarize:
 - Change name and location
 - List of artifacts created with brief descriptions, plus any conditional artifact you skipped and why
 - What's ready: "All artifacts needed for implementation are ready."
-- Prompt: "The artifacts are ready for review. When you are ready, run \`/opsx:apply\`."
+- Prompt: "The artifacts are ready for review. When you are ready, run \`/opsx:apply\`." That line is for the user. Do not invoke apply, load an apply skill, or edit project code after this summary.
 
 **Artifact Creation Guidelines**
 
@@ -291,7 +301,11 @@ After completing all artifacts, summarize:
   - These guide what you write, but should never appear in the output
 
 **Guardrails**
-- The request that invoked this workflow authorizes planning only. Any implementation or apply instruction in that request does not carry forward. Do NOT implement the change, start the apply workflow, or edit project code during this workflow. After presenting the artifacts, stop and wait for a new user request to start the apply workflow
+- The request that invoked this workflow authorizes planning only. Any implementation or apply instruction in that request does not carry forward. Do NOT implement the change, start the apply workflow, or edit project code during this workflow. After presenting the artifacts, stop. Wait for a new user request after the artifacts are presented. Do not start the apply workflow yourself.
+- Do not run tests, linters, or builds. Do not grep or edit package or test source to investigate failures
+- Do not invoke \`/opsx:apply\`, an apply skill, or any apply slash command in this conversation
+- If an artifact file already exists at \`resolvedOutputPath\`, do not rewrite it
+- After status shows the required set is complete, print the summary and stop
 - Create every artifact the apply phase transitively depends on, not just the ids listed in \`apply.requires\`
 - Always read dependency artifacts before creating a new one - re-read from disk, not from conversation memory (files may have changed since you last saw them)
 - Ask about ambiguities that would materially change scope, externally observable behavior, compatibility, or acceptance criteria; for minor details, make reasonable assumptions and record them

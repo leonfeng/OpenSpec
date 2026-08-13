@@ -855,7 +855,10 @@ describe('InitCommand', () => {
           'Any implementation or apply instruction in that request does not carry forward'
         );
         expect(content, proposeFile).toContain(
-          'wait for a new user request to start the apply workflow'
+          'Wait for a new user request after the artifacts are presented'
+        );
+        expect(content, proposeFile).toContain(
+          'Do not start the apply workflow yourself'
         );
       }
     });
