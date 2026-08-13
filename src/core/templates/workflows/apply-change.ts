@@ -107,6 +107,8 @@ ${STORE_SELECTION_GUIDANCE}
 
    Writing the same small set of files (A then B then A, or the same path twice) with no checkbox update is a loop. Stop rewriting, mark those tasks complete, then implement a file that does not exist yet or run remaining verify tasks.
 
+   Repeating the same shell command (\`pytest\`, \`python -c\`, grep, ls) after it already completed is a loop. Stop and use the previous output. After the test suite passes, do not run it again unless a later unfinished task requires it.
+
    **Pause if:**
    - Task is unclear → ask for clarification
    - Implementation reveals a design issue → suggest updating artifacts
@@ -182,6 +184,8 @@ What would you like to do?
 - After every implementation write, the next tool call MUST edit the tasks file
 - If a pending task's target file already exists, mark the task complete instead of rewriting it
 - Cycling the same two or more files without a checkbox update is a loop: stop, mark complete, move on
+- Repeating the same shell command after it already completed is a loop: stop and use the previous output
+- After the test suite passes, do not run it again unless a later unfinished task requires it
 - One file write may complete multiple tasks — mark all of them complete
 - After marking tasks, re-run apply instructions and continue from the returned remaining list
 - Prefer editing an existing file over rewriting it in full

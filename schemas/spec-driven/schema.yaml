@@ -214,4 +214,7 @@ apply:
     target file already exists, mark it complete instead of rewriting it.
     Cycling the same two or more files with no checkbox update is a loop: stop,
     mark those tasks complete, then continue from remaining unfinished work.
+    Repeating the same shell command after it already completed is a loop: stop
+    and use the previous output. After tests pass, do not rerun them unless a
+    later task requires it.
     Pause if you hit blockers or need clarification.

@@ -38,17 +38,17 @@ import {
 import { STORE_SELECTION_GUIDANCE } from '../../../src/core/templates/workflows/store-selection.js';
 
 const EXPECTED_FUNCTION_HASHES: Record<string, string> = {
-  getExploreSkillTemplate: 'fec38ba01c5c20695aca0ec7eff78c26e278ead21459cab8ec1562af51053427',
+  getExploreSkillTemplate: '21d97a057ef26bd9875c4c0929e465157ea417983bfe9eb122cf7485ffb2a774',
   getNewChangeSkillTemplate: '935f6335e2d4b7d1bd4f0538c88386350c25e8b16e11b627556262229583ca51',
   getContinueChangeSkillTemplate: 'ed41e2356af7aad6ef760f60fad19c6843cefe436d8f90084dcba4dbc6bf7272',
-  getApplyChangeSkillTemplate: 'c0853f1209a37fea033248701aa4ee2707c64d5e858afcb8b33fb6be34e466ea',
+  getApplyChangeSkillTemplate: 'a531d6cb105bc8d12b133439422cbe947dab30219b28319e4c4b2f3baa07f064',
   getFfChangeSkillTemplate: 'fc2a45a08533ee9c7ab30fdab5f832b7d440070048e2a153f03db1620dc379bb',
   getSyncSpecsSkillTemplate: 'd43b112a3c74bc951b094d220c8e75cca26bb00640d404b78af0752af1ff7bd9',
   getOnboardSkillTemplate: 'a9f6134b187ec4f3a5aa6c7c181e51a15fec11b7ac1044a076fdfe79b47fbc80',
-  getOpsxExploreCommandTemplate: 'e2d470148708a9070675edddd1e783f1c71c96625d08cff4fe7a9994e0d292c0',
+  getOpsxExploreCommandTemplate: '2dc615b3f7b0decc5a91d474b8947b4421849acbeaf51eaac05f96dd3224c644',
   getOpsxNewCommandTemplate: '08e784e52ac2c146975a874257c589d88e93efbd83dc4d79253c8525f5c3064f',
   getOpsxContinueCommandTemplate: 'ae964cd00f6ca332fd7f9428a577ade75be279f50431d5f60ece8172e8d1a4b1',
-  getOpsxApplyCommandTemplate: 'a66340aa07719e7b6512e80c4c0ca357d01debad81a8b10b68591865fa423c5a',
+  getOpsxApplyCommandTemplate: 'cc512734853616fa2b9803ae73521e1f4dfbd601f4bb66535cbc48ae4e068940',
   getOpsxFfCommandTemplate: '012610f85576a7055dfec2aaabba6bfc245454ce91fb6214587ae9316dc2b864',
   getArchiveChangeSkillTemplate: 'bac246c00104a7a5c5600de22f44815093fc659046ccc085a3f2d8de0c7fb7d9',
   getBulkArchiveChangeSkillTemplate: '7cf7766fcc397dc4ea2dfb9bc8686dfb8d941e8449731893260cf395141c163f',
@@ -66,10 +66,10 @@ const EXPECTED_FUNCTION_HASHES: Record<string, string> = {
 };
 
 const EXPECTED_GENERATED_SKILL_CONTENT_HASHES: Record<string, string> = {
-  'openspec-explore': '80109dec3abf1505ab1037f7196baac4fcdf175ca954411e8d439e5da881bf62',
+  'openspec-explore': '1714c87e6cef9dab0c5e82323f8380a6668c305fa9d772044767ea63e88890f1',
   'openspec-new-change': '579d432771703f947a331a6ed288bf9c6660ca015fcd376d76f19b6ac7683082',
   'openspec-continue-change': '5c34be8194cdb4c5158335e47aece71143e8a22bfb4179dba47fd8aaf436d395',
-  'openspec-apply-change': 'b5d203e5f10f77970a4b25a364eb241824252c5285cd6a77c5370b6cdc1ecf34',
+  'openspec-apply-change': '4b3433b76a506cf224eaf03a0a3073a1715f1bcbdc55ec3b02540e07863a655e',
   'openspec-ff-change': '19315644df7c582d920acfb67f3c500ca4e06fccc900265b3ac39621d85f7cdb',
   'openspec-sync-specs': '6e85521de10858bb020885eb657aa843e5746b2f09c846aa44545694f456cda9',
   'openspec-archive-change': 'a59e7c7593f454aa8cb8865dbfd687372dba9bf9f3eb9d0468d6a9842fe55ab0',
@@ -631,6 +631,12 @@ describe('skill templates split parity', () => {
       );
       expect(content, variant).toContain(
         'Cycling the same two or more files without a checkbox update is a loop'
+      );
+      expect(content, variant).toContain(
+        'Repeating the same shell command after it already completed is a loop'
+      );
+      expect(content, variant).toContain(
+        'After the test suite passes, do not run it again'
       );
       expect(content, variant).toContain(
         'If a pending task\'s target file already exists, mark the task complete instead of rewriting it'
