@@ -89,12 +89,23 @@ describe('propose implementation boundary', () => {
         'Any implementation or apply instruction in that request does not carry forward'
       );
       expect(body, label).toContain(
-        'wait for a new user request to start the apply workflow'
+        'Wait for a new user request after the artifacts are presented'
       );
+      expect(body, label).toContain('Do not start the apply workflow yourself');
       expect(
         body.lastIndexOf('After presenting the artifacts, stop'),
         `${label} should end with its stop guard`
       ).toBeGreaterThan(body.indexOf('**Output**'));
+    }
+  });
+
+  it('does not explore or repair the codebase before writing artifacts', () => {
+    for (const [label, body] of proposeBodies) {
+      expect(body, label).toContain('Do not run the project\'s tests, linters, or build');
+      expect(body, label).toContain('do not grep or edit package or test source');
+      expect(body, label).toContain('write the proposal artifact next');
+      expect(body, label).toContain('Do not invoke `/opsx:apply`');
+      expect(body, label).toContain('That line is for the user');
     }
   });
 
@@ -116,11 +127,12 @@ describe('propose implementation boundary', () => {
     expect(proposeCommandBody).toContain('When you are ready, run `/opsx:apply`.');
     expect(proposeCommandBody).not.toContain('ask me to implement');
     expect(proposeCommandBody).not.toContain('ask me to apply this change');
+    expect(proposeCommandBody).toContain('Do not invoke apply');
 
-    expect(proposeSkillBody).toContain(
-      'run `/opsx:apply` or ask me to apply this change'
-    );
+    expect(proposeSkillBody).toContain('When you are ready, run `/opsx:apply`.');
+    expect(proposeSkillBody).not.toContain('ask me to apply this change');
     expect(proposeSkillBody).not.toContain('ask me to implement');
+    expect(proposeSkillBody).toContain('Do not invoke apply');
   });
 
   it('preserves both boundaries through every command adapter', () => {
@@ -144,7 +156,10 @@ describe('propose implementation boundary', () => {
         'Any implementation or apply instruction in that request does not carry forward'
       );
       expect(generated, adapter.toolId).toContain(
-        'wait for a new user request to start the apply workflow'
+        'Wait for a new user request after the artifacts are presented'
+      );
+      expect(generated, adapter.toolId).toContain(
+        'Do not start the apply workflow yourself'
       );
       expect(generated, adapter.toolId).toContain(
         `When you are ready, run \`${applyInvocation}\`.`
