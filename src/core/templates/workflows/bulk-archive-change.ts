@@ -179,7 +179,7 @@ ${STORE_SELECTION_GUIDANCE}
    Process changes in the determined order (respecting conflict resolution):
 
    a. **Sync included delta specs**:
-      - Run the \`openspec-sync-specs\` workflow inline (agent-driven intelligent merge) only for changes with entries in \`includedDeltas\`, passing only the included delta paths and explicitly instructing it to ignore that change's \`excludedDeltas\`. Wait for it to finish.
+      - Merge included delta specs inline in this conversation (agent-driven intelligent merge) only for changes with entries in \`includedDeltas\`, passing only the included delta paths and explicitly instructing it to ignore that change's \`excludedDeltas\`. Do not read a \`SKILL.md\`, command file, or \`.opencode\`/\`.agents\` skill path to invoke sync. If a main spec is missing, create it from ADDED deltas; do not glob the repository for \`*specs*\` paths. If a read of a path already succeeded, do not read that path again. Wait for it to finish.
       - For conflicts, apply in resolved order.
       - Pass that change's fetched specs-rule snapshot into inline sync; inline
         sync must reuse it without fetching instructions again
@@ -203,10 +203,13 @@ ${STORE_SELECTION_GUIDANCE}
 
       Target name: use the change name as-is when it already starts with a \`YYYY-MM-DD-\` prefix; otherwise prepend the current date as \`YYYY-MM-DD-<name>\` (same rule as \`openspec archive\`).
 
+      Specs are already handled for this change. Archive it with exactly one CLI call, keeping the same selected-root flags. Do not mkdir, mv, or rm the change yourself. The archive folder is \`<planningHome.changesDir>/archive/<target-name>/\`, a sibling of \`changeRoot\`, never inside it.
+
       \`\`\`bash
-      mkdir -p "<planningHome.changesDir>/archive"
-      mv "<changeRoot>" "<planningHome.changesDir>/archive/<target-name>"
+      openspec archive "<name>" --skip-specs --yes
       \`\`\`
+
+      If that command fails, skip that change and continue. Do not delete \`changeRoot\`. Creating a directory and then deleting it is a loop: stop.
 
    d. **Track outcome** for each change:
       - Success: archived successfully
@@ -323,8 +326,12 @@ No active changes found. Create a new change to get started.
 - Track and report all outcomes (success/skip/fail)
 - Preserve .openspec.yaml when moving to archive
 - Archive directory target uses current date: YYYY-MM-DD-<name>; a name that already starts with a \`YYYY-MM-DD-\` prefix is used as-is (never stack a second date)
+- Archive each change with \`openspec archive "<name>" --skip-specs --yes\`; do not mkdir/mv/rm the change directory
+- Never create an archive directory inside \`changeRoot\`
+- Never \`rm -rf\` \`changeRoot\` or an archive of it
+- Creating a directory and then deleting it is a loop: stop
 - If archive target exists, fail that change but continue with others
-- If sync is requested, run the \`openspec-sync-specs\` workflow inline (agent-driven) for each change with included delta specs
+- If sync is requested, merge included delta specs inline in this conversation for each change with included delta specs; do not read a \`SKILL.md\` or command file to invoke sync
 - Carry the per-delta \`includedDeltas\` and \`excludedDeltas\` decisions into execution; sync and verify only included deltas
 - Report every excluded delta as \`sync skipped\` without treating the archive itself as skipped
 - Never archive a change while a spec sync is still in flight — run the sync inline and verify main specs at \`<planningHome.root>/openspec/specs/<capability-path>/spec.md\` before moving \`changeRoot\`
@@ -519,7 +526,7 @@ ${STORE_SELECTION_GUIDANCE}
    Process changes in the determined order (respecting conflict resolution):
 
    a. **Sync included delta specs**:
-      - Run the \`/opsx:sync\` workflow inline (agent-driven intelligent merge) only for changes with entries in \`includedDeltas\`, passing only the included delta paths and explicitly instructing it to ignore that change's \`excludedDeltas\`. Wait for it to finish.
+      - Merge included delta specs inline in this conversation (agent-driven intelligent merge) only for changes with entries in \`includedDeltas\`, passing only the included delta paths and explicitly instructing it to ignore that change's \`excludedDeltas\`. Do not read a \`SKILL.md\`, command file, or \`.opencode\`/\`.agents\` skill path to invoke sync. If a main spec is missing, create it from ADDED deltas; do not glob the repository for \`*specs*\` paths. If a read of a path already succeeded, do not read that path again. Wait for it to finish.
       - For conflicts, apply in resolved order.
       - Pass that change's fetched specs-rule snapshot into inline sync; inline
         sync must reuse it without fetching instructions again
@@ -543,10 +550,13 @@ ${STORE_SELECTION_GUIDANCE}
 
       Target name: use the change name as-is when it already starts with a \`YYYY-MM-DD-\` prefix; otherwise prepend the current date as \`YYYY-MM-DD-<name>\` (same rule as \`openspec archive\`).
 
+      Specs are already handled for this change. Archive it with exactly one CLI call, keeping the same selected-root flags. Do not mkdir, mv, or rm the change yourself. The archive folder is \`<planningHome.changesDir>/archive/<target-name>/\`, a sibling of \`changeRoot\`, never inside it.
+
       \`\`\`bash
-      mkdir -p "<planningHome.changesDir>/archive"
-      mv "<changeRoot>" "<planningHome.changesDir>/archive/<target-name>"
+      openspec archive "<name>" --skip-specs --yes
       \`\`\`
+
+      If that command fails, skip that change and continue. Do not delete \`changeRoot\`. Creating a directory and then deleting it is a loop: stop.
 
    d. **Track outcome** for each change:
       - Success: archived successfully
@@ -663,8 +673,12 @@ No active changes found. Create a new change to get started.
 - Track and report all outcomes (success/skip/fail)
 - Preserve .openspec.yaml when moving to archive
 - Archive directory target uses current date: YYYY-MM-DD-<name>; a name that already starts with a \`YYYY-MM-DD-\` prefix is used as-is (never stack a second date)
+- Archive each change with \`openspec archive "<name>" --skip-specs --yes\`; do not mkdir/mv/rm the change directory
+- Never create an archive directory inside \`changeRoot\`
+- Never \`rm -rf\` \`changeRoot\` or an archive of it
+- Creating a directory and then deleting it is a loop: stop
 - If archive target exists, fail that change but continue with others
-- If sync is requested, run the \`/opsx:sync\` workflow inline (agent-driven) for each change with included delta specs
+- If sync is requested, merge included delta specs inline in this conversation for each change with included delta specs; do not read a \`SKILL.md\` or command file to invoke sync
 - Carry the per-delta \`includedDeltas\` and \`excludedDeltas\` decisions into execution; sync and verify only included deltas
 - Report every excluded delta as \`sync skipped\` without treating the archive itself as skipped
 - Never archive a change while a spec sync is still in flight — run the sync inline and verify main specs at \`<planningHome.root>/openspec/specs/<capability-path>/spec.md\` before moving \`changeRoot\`

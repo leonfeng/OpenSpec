@@ -95,14 +95,17 @@ ${STORE_SELECTION_GUIDANCE}
    - Remaining tasks overview
    - Dynamic instruction from CLI
 
-6. **Implement tasks (loop until done or blocked)**
+6. **Implement tasks (one at a time until done or blocked)**
 
-   For each pending task:
-   - Show which task is being worked on
-   - Make the code changes required
-   - Keep changes minimal and focused
-   - Mark task complete in the tasks file: \`- [ ]\` → \`- [x]\`
-   - Continue to next task
+   Repeat until apply instructions report \`state: "all_done"\` or you must pause:
+
+   a. Work only from the current remaining-task list. Re-run \`openspec instructions apply --change "<name>" --json\` after each checkbox update (and whenever the list may be stale) instead of continuing from memory.
+   b. If a pending task's target file already exists from a successful write, mark that task complete. Do not rewrite the file.
+   c. Otherwise implement the next pending task: show which task, make the change, keep it minimal.
+   d. Immediately edit the tasks file: \`- [ ]\` → \`- [x]\` for every task that write completed. This edit is mandatory and MUST be the next tool call — do not write any other implementation file until it succeeds.
+   e. Return to (a).
+
+   Writing the same small set of files (A then B then A, or the same path twice) with no checkbox update is a loop. Stop rewriting, mark those tasks complete, then implement a file that does not exist yet or run remaining verify tasks.
 
    **Pause if:**
    - Task is unclear → ask for clarification
@@ -177,6 +180,12 @@ What would you like to do?
 - If implementation reveals issues, pause and suggest artifact updates
 - Keep code changes minimal and scoped to each task
 - Update task checkbox immediately after completing each task
+- After every implementation write, the next tool call MUST edit the tasks file
+- If a pending task's target file already exists, mark the task complete instead of rewriting it
+- Cycling the same two or more files without a checkbox update is a loop: stop, mark complete, move on
+- One file write may complete multiple tasks — mark all of them complete
+- After marking tasks, re-run apply instructions and continue from the returned remaining list
+- Prefer editing an existing file over rewriting it in full
 - Pause on errors, blockers, or unclear requirements - don't guess
 - When a task needs work beyond what the spec describes, surface the added scope and pause - never silently narrow, defer, or simplify away specified behavior
 - Only mark a task \`- [x]\` when its specified behavior is fully implemented, not when it is partially done or deferred

@@ -41,22 +41,22 @@ const EXPECTED_FUNCTION_HASHES: Record<string, string> = {
   getExploreSkillTemplate: '3efc37cddf342318ac37be7bb4ff5915f454b4c5bb127294ebdc7534ee21aa23',
   getNewChangeSkillTemplate: 'eabd1e895c5881dcb17dcbaa3fb26098dd59e8eacb318e400820b4dc811ef781',
   getContinueChangeSkillTemplate: '012136f6411a99c8fa228e2f9444cb64b0a89e0f56fdeac2fe03b2f5bee0c5d7',
-  getApplyChangeSkillTemplate: 'd1e7d5ceb85193c0964057dbb88e9651526754bd33f84020e2440ff0621d5dbb',
+  getApplyChangeSkillTemplate: '0d74d939c60c85724a06f7918f6186e92c4e1596b6b7490552e216646c2e711e',
   getFfChangeSkillTemplate: '5501740e7ec36ab23ab8c3a0d6dd0655a5e2f35433c7b90e82904fef5e7a326a',
   getSyncSpecsSkillTemplate: 'b099e2ff31859c9b10d928066e662524f9aad9ecf2be12fceacb732d718c4146',
   getOnboardSkillTemplate: '29b1d825179cff92fbc7b790694c1baef138575ea3de56848715e27d7e367946',
   getOpsxExploreCommandTemplate: 'd2f70d11588f902c15c1e5ce9908cc4124c6b82fe78dc766ac5c3599c9e2a6f1',
   getOpsxNewCommandTemplate: 'f2d30e569798a4c92ba932859d6ba4e0ad10e18feccbade1cfee0957597b3463',
   getOpsxContinueCommandTemplate: 'e50e50266efa1b8e64ff9b6274ee8254f0a240d6adc1b862d126e2f1c9d3a559',
-  getOpsxApplyCommandTemplate: 'e3579ac78f2e2c75fa3d3a7ac7dc3e49c395e96f7323398f0f041d94f8de9bb0',
+  getOpsxApplyCommandTemplate: '04b6a14d2d7edeb41b42f85297690a79e586b32496ca8672b46434bea3cc0dec',
   getOpsxFfCommandTemplate: 'e603bc0996604e6c17a3140943ea642a32d0fc65565e25424bf956e124c55772',
-  getArchiveChangeSkillTemplate: '56bfada1a5f35a127791b70de9d428a75b5aedd1584d6c9803a1ecb1fd1b4a23',
-  getBulkArchiveChangeSkillTemplate: '93875998cade5322d95b43299fba794bc1da754e917dd63a770406386a6d295d',
+  getArchiveChangeSkillTemplate: '30d7d7efb59edad25ab67e9e1ce88068d1561d26da0f45715311c3bbdd029b03',
+  getBulkArchiveChangeSkillTemplate: '62359645591c4d274b13a99e5aea14e7ae8fa0be356582f085a58d20d4bfbd0b',
   getOpsxSyncCommandTemplate: '0d2427efb79986e8fff3f96bd075a739c80d45eb29159fae717e950030da8202',
   getVerifyChangeSkillTemplate: '223b7ffd99299a7d430e13092b9a0a3421b39f0d3217232f46c39d79b5f619ff',
-  getOpsxArchiveCommandTemplate: '9f973c819b11620985b03322945f0e0a92a02a2ef455b94e74482f5e6292ac5d',
+  getOpsxArchiveCommandTemplate: '9368e295370b2742667f40e171a3a22fdc08c2c27d9af6187e9804efd4bbec82',
   getOpsxOnboardCommandTemplate: '7e251da66e2fdf539a09326463ee3ed0d01fe665ecb1d8f36f941fed00a01891',
-  getOpsxBulkArchiveCommandTemplate: '9fa8cdebe2f5667ebfc37bdc023396762c59d5b038c771dac2d8fd2c19e2627b',
+  getOpsxBulkArchiveCommandTemplate: '5c4dfbd587043d24b7cc631a95a152344d03ce702a8d4c6a319ea10f709e6b07',
   getOpsxVerifyCommandTemplate: '1efcf7eff0671f48e9d9420f50865c563dd3079ee60f8c380bb7a90dd0102696',
   getOpsxProposeSkillTemplate: '24623c066f97e34b957d448d1f9a9e8b8a13da3dfce45d45671f6226a2534848',
   getOpsxProposeCommandTemplate: 'e67ba591efb0fecacb2229d06dfa84af18b825fab8a7b01377279e4f09a06ce4',
@@ -69,11 +69,11 @@ const EXPECTED_GENERATED_SKILL_CONTENT_HASHES: Record<string, string> = {
   'openspec-explore': '4d9736372cc1faf8a5d8a66395a95bf77b9f3fcd2cda40411ad1db6927e8066a',
   'openspec-new-change': 'ec4529beef978e34634a6f7286fab55d68fad8fb374dceb45691d52caab33fbb',
   'openspec-continue-change': 'bb6194a16c54891cdb253678e8f70ce53b2af86735243980f366ce551d37e42e',
-  'openspec-apply-change': '81ea96d9fa6ec8536cd23c1fe561ed28e1cc1cad0a8ceb700588e08974cc0e49',
+  'openspec-apply-change': 'a826fb1bbed0e2840d0edcac85a9d836bd9d42e23309aecf755ba5b7cf4470ca',
   'openspec-ff-change': '217c78da2b6e8358f609ac57dcd02266aaec3354ce26dc6ec2fc9c2174673ab4',
   'openspec-sync-specs': 'd933d8856584d6c1253de91e652e7aee9e85c77ad4d3531f6476f79d84e6e5e8',
-  'openspec-archive-change': '7c65053d674ba4e1e20e2bf73ba7e5a7f94baef2eaa9b33cee48d4cadea51b7a',
-  'openspec-bulk-archive-change': '2039b9ecf6e64339dffe0e16272507a386d9fe326f419ff758315aa736fdd96c',
+  'openspec-archive-change': 'fcd1a14c787837763e0f7826bf59db993271bc56f5459e0c2e302cc801d2e794',
+  'openspec-bulk-archive-change': 'd88d50b54f7cb52a913833d586311b8b03ddd3a6119bbb9db41e49141eaf9eaf',
   'openspec-verify-change': 'af9be013dcbe8c6d8f6d9ab10c893fbd03f4c62933c384d82f63894dd0ceb84f',
   'openspec-onboard': 'd53403b4910ab64307862ccf97e70bd8f7174ee44508088fb239c880f0939331',
   'openspec-propose': '25d08ed4f031770cea219604167d76bca9f3e89fe0c2f545263674482c6f13f0',
@@ -421,18 +421,25 @@ describe('skill templates split parity', () => {
     const generatedSkill = generateSkillContent(getArchiveChangeSkillTemplate(), 'PARITY-BASELINE');
     const commandContent = getOpsxArchiveCommandTemplate().content;
 
-    // The single archive skill references openspec-sync-specs; opsx command references /opsx:sync.
-    expect(generatedSkill, 'skill').toContain('run the `openspec-sync-specs` workflow inline');
-    expect(commandContent, 'opsx command').toContain('run the `/opsx:sync` workflow inline');
-
     const variants: Array<[string, string]> = [
       ['skill', generatedSkill],
       ['opsx command', commandContent],
     ];
 
     for (const [variant, content] of variants) {
+      expect(content, variant).toContain('merge the delta specs into main specs in this same conversation');
+      expect(content, variant).toContain('do not read a `SKILL.md`');
+      expect(content, variant).not.toContain('run the `openspec-sync-specs` workflow inline');
+      expect(content, variant).not.toContain('run the `/opsx:sync` workflow inline');
+      expect(content, variant).toContain('openspec archive "<name>" --skip-specs --yes');
+      expect(content, variant).toContain('Creating a directory and then deleting it is a loop');
+      expect(content, variant).toContain('Never create an archive directory inside `changeRoot`');
+      expect(content, variant).not.toContain('mkdir -p "<planningHome.changesDir>/archive"');
+      expect(content, variant).not.toContain('mv "<changeRoot>"');
       expect(content, variant).toContain('Do not delegate it to a background task');
       expect(content, variant).toContain('Never archive while a spec sync is still in flight');
+      expect(content, variant).toContain('do not glob the repository for `*specs*`');
+      expect(content, variant).toContain('If a read of a path already succeeded, do not read that path again');
 
       // Verification must follow delta semantics.
       expect(content, variant).toContain('MODIFIED requirements carrying the scenario and description changes');
@@ -451,19 +458,22 @@ describe('skill templates split parity', () => {
     const generatedSkill = generateSkillContent(getBulkArchiveChangeSkillTemplate(), 'PARITY-BASELINE');
     const commandContent = getOpsxBulkArchiveCommandTemplate().content;
 
-    // The bulk archive skill references openspec-sync-specs; opsx command references /opsx:sync.
-    expect(generatedSkill, 'bulk skill').toContain('run the `openspec-sync-specs` workflow inline');
-    expect(commandContent, 'bulk opsx command').toContain('run the `/opsx:sync` workflow inline');
-
     const variants: Array<[string, string]> = [
       ['bulk skill', generatedSkill],
       ['bulk opsx command', commandContent],
     ];
 
     for (const [variant, content] of variants) {
+      expect(content, variant).toContain('Merge included delta specs inline in this conversation');
+      expect(content, variant).toContain('Do not read a `SKILL.md`');
+      expect(content, variant).not.toContain('run the `openspec-sync-specs` workflow inline');
+      expect(content, variant).not.toContain('run the `/opsx:sync` workflow inline');
+      expect(content, variant).toContain('openspec archive "<name>" --skip-specs --yes');
+      expect(content, variant).toContain('Creating a directory and then deleting it is a loop');
       expect(content, variant).toContain('Do not delegate to a background task');
       expect(content, variant).toContain('Never archive a change while a spec sync is still in flight');
       expect(content, variant).toContain('Verify included delta specs before moving changeRoot');
+      expect(content, variant).toContain('do not glob the repository for `*specs*` paths');
 
       // Verification must follow delta semantics.
       expect(content, variant).toContain('MODIFIED requirements carrying scenario and description changes');
@@ -615,6 +625,18 @@ describe('skill templates split parity', () => {
       );
       expect(content, variant).toContain(
         'These are prompt-level behavior contracts, not enforceable checks'
+      );
+      expect(content, variant).toContain(
+        'This edit is mandatory and MUST be the next tool call'
+      );
+      expect(content, variant).toContain(
+        'Cycling the same two or more files without a checkbox update is a loop'
+      );
+      expect(content, variant).toContain(
+        'If a pending task\'s target file already exists, mark the task complete instead of rewriting it'
+      );
+      expect(content, variant).toContain(
+        'One file write may complete multiple tasks — mark all of them complete'
       );
     }
   });
