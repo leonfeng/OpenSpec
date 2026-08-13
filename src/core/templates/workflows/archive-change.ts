@@ -96,6 +96,7 @@ ${STORE_SELECTION_GUIDANCE}
 
    **If delta specs exist:**
    - Compare each delta spec with its corresponding main spec at \`<planningHome.root>/openspec/specs/<capability-path>/spec.md\` (use the store-aware \`planningHome.root\` from step 2, not a hardcoded repo path)
+   - If that main spec file does not exist, the needed change is "create it from ADDED". Do not search the repository for other \`*specs*\` paths.
    - Determine what changes would be applied (adds, modifications, removals, renames)
    - Show a combined summary before prompting
 
@@ -118,7 +119,17 @@ ${STORE_SELECTION_GUIDANCE}
    form of main specs produced by this merge; do not use them as archive guidance,
    change CLI behavior, or copy the rule text into any output file.
 
-   Then run the \`openspec-sync-specs\` workflow inline (agent-driven intelligent merge) for change '<name>', passing the delta spec analysis and the fetched specs-rule snapshot from above, and wait for it to finish. The inline sync must reuse that snapshot without fetching \`specs\` instructions again. Do not delegate it to a background task — step 5 would move \`changeRoot\` out from under a sync that is still reading it, leaving the change archived and the main specs never updated. If your agent can only run it by delegation, delegate synchronously and wait for the result.
+   Then merge the delta specs into main specs in this same conversation (agent-driven intelligent merge) for change '<name>', using the delta spec analysis and the fetched specs-rule snapshot from above. The inline sync must reuse that snapshot without fetching \`specs\` instructions again. Do this here — do not invoke a named skill or slash command, and do not read a \`SKILL.md\`, command markdown file, or any path under \`.opencode/\` or \`.agents/\` to look up how to sync. If a read of a path already succeeded, do not read that path again.
+
+   For each capability in \`artifactPaths.specs.existingOutputPaths\`:
+   - The main spec path is always \`<planningHome.root>/openspec/specs/<capability-path>/spec.md\`. If that file is missing, the capability is new: create it from the delta's ADDED requirements (copy the delta's \`## Purpose\` when present). A missing main spec is not a search failure — do not glob the repository for \`*specs*\` paths.
+   - ADDED: add new requirements, or update them if they already exist
+   - MODIFIED: apply named scenario and description changes; keep other scenarios
+   - REMOVED: remove the requirement (delete the main spec only when retirement rules allow)
+   - RENAMED: FROM → TO
+   - Write a single \`## Requirements\` section; never copy \`## ADDED/MODIFIED/REMOVED/RENAMED Requirements\` headers into the main spec
+
+   Do not delegate it to a background task — step 5 would move \`changeRoot\` out from under a sync that is still reading it, leaving the change archived and the main specs never updated. If your agent can only run it by delegation, delegate synchronously and wait for the result.
 
    Then re-run the comparison from the top of this step against every capability that has a delta spec in \`artifactPaths.specs.existingOutputPaths\` — not only the ones the sync reports it touched. A successful sync leaves nothing left to apply, so each capability must now read as already synced:
    - ADDED requirements present
@@ -130,20 +141,21 @@ ${STORE_SELECTION_GUIDANCE}
 
 5. **Perform the archive**
 
-   Create an \`archive\` directory under \`planningHome.changesDir\` if it doesn't exist:
-   \`\`\`bash
-   mkdir -p "<planningHome.changesDir>/archive"
-   \`\`\`
+   The archive folder is a sibling of the change directory: \`<planningHome.changesDir>/archive/\`. It is never inside \`changeRoot\`. Do not create \`<changeRoot>/archive\`. Do not mkdir, mv, cp, or rm the change yourself.
 
-   Generate the target name: use the change name as-is when it already starts with a \`YYYY-MM-DD-\` prefix; otherwise prepend the current date as \`YYYY-MM-DD-<change-name>\`. Never stack a second date (same rule as \`openspec archive\`).
-
-   **Check if target already exists:**
-   - If yes: Fail with error, suggest renaming existing archive or using different date
-   - If no: Move \`changeRoot\` to the archive directory
+   Specs are already handled (synced in this conversation, or the user chose to skip). Move the change with exactly one CLI call, keeping the same selected-root flags:
 
    \`\`\`bash
-   mv "<changeRoot>" "<planningHome.changesDir>/archive/<target-name>"
+   openspec archive "<name>" --skip-specs --yes
    \`\`\`
+
+   The CLI creates \`<planningHome.changesDir>/archive/<target-name>/\` (use the change name as-is when it already starts with a \`YYYY-MM-DD-\` prefix; otherwise it prepends the current date). Never stack a second date.
+
+   If that command succeeds: print the summary below and stop. Do not mkdir, rm, mv, or recreate the change.
+
+   If it fails: report the error and stop. Do not delete \`changeRoot\`. Do not create placeholder or \`.gitkeep\` directories. Do not retry with mkdir/mv.
+
+   Creating a directory and then deleting it is a loop: stop.
 
 6. **Display summary**
 
@@ -172,8 +184,15 @@ ${STORE_SELECTION_GUIDANCE}
 - Use artifact graph (openspec status --json) for completion checking
 - Don't block archive on warnings - just inform and confirm
 - Preserve .openspec.yaml when moving to archive (it moves with the directory)
+- Archive by running \`openspec archive "<name>" --skip-specs --yes\`; do not mkdir/mv/rm the change directory
+- Never create an archive directory inside \`changeRoot\`
+- Never \`rm -rf\` \`changeRoot\` or an archive of it
+- Creating a directory and then deleting it is a loop: stop
+- After a successful archive command, stop
 - Show clear summary of what happened
-- If sync is requested, run the \`openspec-sync-specs\` workflow inline (agent-driven)
+- If sync is requested, merge delta specs inline in this conversation; do not read a \`SKILL.md\`, command file, or \`.opencode\`/\`.agents\` skill path to invoke sync
+- If a main spec is missing, create it from ADDED deltas at \`<planningHome.root>/openspec/specs/<capability-path>/spec.md\`; do not glob the repo for spec-like paths
+- Do not re-read a file whose previous read succeeded
 - Never archive while a spec sync is still in flight — run the sync inline and verify the main specs before moving \`changeRoot\`
 - If delta specs exist, always run the sync assessment and show the combined summary before prompting
 - Apply relevant runtime context and report conflicts; operation guidance remains advisory
@@ -278,6 +297,7 @@ ${STORE_SELECTION_GUIDANCE}
 
    **If delta specs exist:**
    - Compare each delta spec with its corresponding main spec at \`<planningHome.root>/openspec/specs/<capability-path>/spec.md\` (use the store-aware \`planningHome.root\` from step 2, not a hardcoded repo path)
+   - If that main spec file does not exist, the needed change is "create it from ADDED". Do not search the repository for other \`*specs*\` paths.
    - Determine what changes would be applied (adds, modifications, removals, renames)
    - Show a combined summary before prompting
 
@@ -300,7 +320,17 @@ ${STORE_SELECTION_GUIDANCE}
    form of main specs produced by this merge; do not use them as archive guidance,
    change CLI behavior, or copy the rule text into any output file.
 
-   Then run the \`/opsx:sync\` workflow inline (agent-driven intelligent merge) for change '<name>', passing the delta spec analysis and the fetched specs-rule snapshot from above, and wait for it to finish. The inline sync must reuse that snapshot without fetching \`specs\` instructions again. Do not delegate it to a background task — step 5 would move \`changeRoot\` out from under a sync that is still reading it, leaving the change archived and the main specs never updated. If your agent can only run it by delegation, delegate synchronously and wait for the result.
+   Then merge the delta specs into main specs in this same conversation (agent-driven intelligent merge) for change '<name>', using the delta spec analysis and the fetched specs-rule snapshot from above. The inline sync must reuse that snapshot without fetching \`specs\` instructions again. Do this here — do not invoke a named skill or slash command, and do not read a \`SKILL.md\`, command markdown file, or any path under \`.opencode/\` or \`.agents/\` to look up how to sync. If a read of a path already succeeded, do not read that path again.
+
+   For each capability in \`artifactPaths.specs.existingOutputPaths\`:
+   - The main spec path is always \`<planningHome.root>/openspec/specs/<capability-path>/spec.md\`. If that file is missing, the capability is new: create it from the delta's ADDED requirements (copy the delta's \`## Purpose\` when present). A missing main spec is not a search failure — do not glob the repository for \`*specs*\` paths.
+   - ADDED: add new requirements, or update them if they already exist
+   - MODIFIED: apply named scenario and description changes; keep other scenarios
+   - REMOVED: remove the requirement (delete the main spec only when retirement rules allow)
+   - RENAMED: FROM → TO
+   - Write a single \`## Requirements\` section; never copy \`## ADDED/MODIFIED/REMOVED/RENAMED Requirements\` headers into the main spec
+
+   Do not delegate it to a background task — step 5 would move \`changeRoot\` out from under a sync that is still reading it, leaving the change archived and the main specs never updated. If your agent can only run it by delegation, delegate synchronously and wait for the result.
 
    Then re-run the comparison from the top of this step against every capability that has a delta spec in \`artifactPaths.specs.existingOutputPaths\` — not only the ones the sync reports it touched. A successful sync leaves nothing left to apply, so each capability must now read as already synced:
    - ADDED requirements present
@@ -312,20 +342,21 @@ ${STORE_SELECTION_GUIDANCE}
 
 5. **Perform the archive**
 
-   Create an \`archive\` directory under \`planningHome.changesDir\` if it doesn't exist:
-   \`\`\`bash
-   mkdir -p "<planningHome.changesDir>/archive"
-   \`\`\`
+   The archive folder is a sibling of the change directory: \`<planningHome.changesDir>/archive/\`. It is never inside \`changeRoot\`. Do not create \`<changeRoot>/archive\`. Do not mkdir, mv, cp, or rm the change yourself.
 
-   Generate the target name: use the change name as-is when it already starts with a \`YYYY-MM-DD-\` prefix; otherwise prepend the current date as \`YYYY-MM-DD-<change-name>\`. Never stack a second date (same rule as \`openspec archive\`).
-
-   **Check if target already exists:**
-   - If yes: Fail with error, suggest renaming existing archive or using different date
-   - If no: Move \`changeRoot\` to the archive directory
+   Specs are already handled (synced in this conversation, or the user chose to skip). Move the change with exactly one CLI call, keeping the same selected-root flags:
 
    \`\`\`bash
-   mv "<changeRoot>" "<planningHome.changesDir>/archive/<target-name>"
+   openspec archive "<name>" --skip-specs --yes
    \`\`\`
+
+   The CLI creates \`<planningHome.changesDir>/archive/<target-name>/\` (use the change name as-is when it already starts with a \`YYYY-MM-DD-\` prefix; otherwise it prepends the current date). Never stack a second date.
+
+   If that command succeeds: print the summary below and stop. Do not mkdir, rm, mv, or recreate the change.
+
+   If it fails: report the error and stop. Do not delete \`changeRoot\`. Do not create placeholder or \`.gitkeep\` directories. Do not retry with mkdir/mv.
+
+   Creating a directory and then deleting it is a loop: stop.
 
 6. **Display summary**
 
@@ -391,9 +422,9 @@ Review the archive if this was not intentional.
 Target archive directory already exists.
 
 **Options:**
-1. Rename the existing archive
-2. Delete the existing archive if it's a duplicate
-3. Wait until a different date to archive
+1. Ask the user whether to rename the existing archive
+2. Wait until a different date to archive
+   Do not delete the existing archive yourself.
 \`\`\`
 
 **Guardrails**
@@ -401,8 +432,15 @@ Target archive directory already exists.
 - Use artifact graph (openspec status --json) for completion checking
 - Don't block archive on warnings - just inform and confirm
 - Preserve .openspec.yaml when moving to archive (it moves with the directory)
+- Archive by running \`openspec archive "<name>" --skip-specs --yes\`; do not mkdir/mv/rm the change directory
+- Never create an archive directory inside \`changeRoot\`
+- Never \`rm -rf\` \`changeRoot\` or an archive of it
+- Creating a directory and then deleting it is a loop: stop
+- After a successful archive command, stop
 - Show clear summary of what happened
-- If sync is requested, run the \`/opsx:sync\` workflow inline (agent-driven)
+- If sync is requested, merge delta specs inline in this conversation; do not read a \`SKILL.md\`, command file, or \`.opencode\`/\`.agents\` skill path to invoke sync
+- If a main spec is missing, create it from ADDED deltas at \`<planningHome.root>/openspec/specs/<capability-path>/spec.md\`; do not glob the repo for spec-like paths
+- Do not re-read a file whose previous read succeeded
 - Never archive while a spec sync is still in flight — run the sync inline and verify the main specs before moving \`changeRoot\`
 - If delta specs exist, always run the sync assessment and show the combined summary before prompting
 - Apply relevant runtime context and report conflicts; operation guidance remains advisory

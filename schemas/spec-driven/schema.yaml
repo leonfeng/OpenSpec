@@ -180,6 +180,8 @@ artifacts:
       Guidelines:
       - Group related tasks under ## numbered headings
       - Each task MUST be a checkbox: `- [ ] X.Y Task description`
+      - Each checkbox is a distinct deliverable (a file, a test file, or a user-visible behavior), not a method inside a file already covered by another task
+      - Do not split one source file into one task per function — apply agents will rewrite that file forever
       - Tasks should be small enough to complete in one session
       - Order tasks by dependency (what must be done first?)
 
@@ -207,4 +209,9 @@ apply:
   tracks: tasks.md
   instruction: |
     Read context files, work through pending tasks, mark complete as you go.
+    After every implementation write, the next tool call MUST edit the tasks file
+    (`- [ ]` → `- [x]`) before writing any other file. If a pending task's
+    target file already exists, mark it complete instead of rewriting it.
+    Cycling the same two or more files with no checkbox update is a loop: stop,
+    mark those tasks complete, then continue from remaining unfinished work.
     Pause if you hit blockers or need clarification.

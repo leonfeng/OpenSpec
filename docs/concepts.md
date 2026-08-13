@@ -340,6 +340,7 @@ Tasks are the **implementation checklist** — concrete steps with checkboxes.
 **Task best practices:**
 - Group related tasks under headings
 - Use hierarchical numbering (1.1, 1.2, etc.)
+- Keep each checkbox a distinct deliverable (a file or behavior), not a method inside a file
 - Keep tasks small enough to complete in one session
 - Check tasks off as you complete them
 

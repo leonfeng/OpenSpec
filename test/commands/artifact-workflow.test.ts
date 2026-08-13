@@ -805,6 +805,8 @@ apply:
       expect(result.exitCode).toBe(0);
       // Should show the instruction from spec-driven schema apply block
       expect(result.stdout).toContain('work through pending tasks');
+      expect(result.stdout).toContain('the next tool call MUST edit the tasks file');
+      expect(result.stdout).toContain('Cycling the same two or more files');
     });
 
     it('shows all_done state when all tasks are complete', async () => {
