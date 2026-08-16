@@ -65,7 +65,7 @@ openspec init
 
 This creates skills in `.claude/skills/` (or equivalent) that AI coding assistants auto-detect.
 
-By default, OpenSpec uses the `core` workflow profile (`propose`, `explore`, `apply`, `update`, `sync`, `archive`). If you want the expanded workflow commands (`new`, `continue`, `ff`, `verify`, `bulk-archive`, `onboard`), configure them with `openspec config profile` and apply with `openspec update`.
+By default, OpenSpec uses the `core` workflow profile (`propose`, `explore`, `apply`, `update`, `split`, `sync`, `archive`). If you want the expanded workflow commands (`new`, `continue`, `ff`, `verify`, `bulk-archive`, `onboard`), configure them with `openspec config profile` and apply with `openspec update`.
 
 During setup, you'll be prompted to create a **project config** (`openspec/config.yaml`). This is optional but recommended.
 
@@ -164,6 +164,7 @@ rules:
 | `/opsx:ff` | Fast-forward planning artifacts (expanded workflow) |
 | `/opsx:apply` | Implement tasks, updating artifacts as needed |
 | `/opsx:update` | Revise a change's planning artifacts and keep them coherent |
+| `/opsx:split` | Split one change into independently applyable changes |
 | `/opsx:verify` | Validate implementation against artifacts (expanded workflow) |
 | `/opsx:sync` | Merge delta specs into main specs (optional) |
 | `/opsx:archive` | Archive when done |
@@ -214,6 +215,12 @@ Works through tasks, checking them off as you go. If you're juggling multiple ch
 /opsx:update add-dark-mode - we're storing the theme in a cookie now
 ```
 Revises the change's existing planning artifacts and keeps them coherent - in any direction (a design edit may ripple back to the proposal). Planning artifacts only: it never edits code, and it never creates missing artifacts (that's `/opsx:continue`). Every edit is confirmed with you first. If the change was already implemented, it recommends `/opsx:apply` so the code catches up with the revised plan. If your revision changes the change's *intent*, start fresh instead - see [When to Update vs. Start Fresh](#when-to-update-vs-start-fresh).
+
+### Split a large change
+```
+/opsx:split feat-user-account-deletion
+```
+Turns one change into multiple independently applyable changes. Specs (capabilities) describe behavior; `/opsx:apply` still implements a **change**. Splitting specs inside the same change does not create independently applyable units. Use this when a change has several layers (API, CLI, web) or when you asked to apply only one slice.
 
 ### Sync delta specs
 ```text
