@@ -930,11 +930,12 @@ metadata:
 
       await updateCommand.execute(testDir);
 
-      // Verify core profile skill files were created/updated (propose, explore, apply, update, sync, archive)
+      // Verify core profile skill files were created/updated (propose, explore, apply, update, split, sync, archive)
       const coreSkillNames = [
         'openspec-explore',
         'openspec-apply-change',
         'openspec-update-change',
+        'openspec-split-change',
         'openspec-sync-specs',
         'openspec-archive-change',
         'openspec-propose',
@@ -2900,6 +2901,7 @@ More user content after markers.
         'openspec-propose',
         'openspec-explore',
         'openspec-apply-change',
+        'openspec-split-change',
         'openspec-sync-specs',
         'openspec-archive-change',
       ];
@@ -3022,7 +3024,7 @@ More user content after markers.
         call.map(arg => String(arg)).join(' ')
       );
       expect(calls.some(call =>
-        call.includes('Your custom profile is missing 2 core workflows: update, sync')
+        call.includes('Your custom profile is missing 3 core workflows: update, split, sync')
       )).toBe(true);
       expect(calls.some(call =>
         call.includes('openspec config profile core')
@@ -3043,7 +3045,7 @@ More user content after markers.
         featureFlags: {},
         profile: 'custom',
         delivery: 'both',
-        workflows: ['propose', 'explore', 'apply', 'sync', 'archive'],
+        workflows: ['propose', 'explore', 'apply', 'split', 'sync', 'archive'],
       });
 
       const initCommand = new InitCommand({ tools: 'claude', force: true });
@@ -3071,7 +3073,7 @@ More user content after markers.
         featureFlags: {},
         profile: 'custom',
         delivery: 'both',
-        workflows: ['propose', 'explore', 'apply', 'update', 'sync', 'archive', 'verify'],
+        workflows: ['propose', 'explore', 'apply', 'update', 'split', 'sync', 'archive', 'verify'],
       });
 
       const initCommand = new InitCommand({ tools: 'claude', force: true });
@@ -3133,6 +3135,14 @@ More user content after markers.
       expect(updateSkillContent).not.toContain('/opsx:');
       expect(updateSkillContent).not.toContain('/opsx-');
       expect(updateSkillContent).toContain('/openspec-');
+
+      const splitSkillContent = await fs.readFile(
+        path.join(skillsDir, 'openspec-split-change', 'SKILL.md'),
+        'utf-8'
+      );
+      expect(splitSkillContent).not.toContain('/opsx:');
+      expect(splitSkillContent).not.toContain('/opsx-');
+      expect(splitSkillContent).toContain('/openspec-');
     });
 
     it('should respect commands-only delivery setting', async () => {

@@ -83,12 +83,13 @@ describe('InitCommand', () => {
 
       await initCommand.execute(testDir);
 
-      // Core profile: propose, explore, apply, update, sync, archive
+      // Core profile: propose, explore, apply, update, split, sync, archive
       const coreSkillNames = [
         'openspec-propose',
         'openspec-explore',
         'openspec-apply-change',
         'openspec-update-change',
+        'openspec-split-change',
         'openspec-sync-specs',
         'openspec-archive-change',
       ];
@@ -123,12 +124,13 @@ describe('InitCommand', () => {
 
       await initCommand.execute(testDir);
 
-      // Core profile: propose, explore, apply, update, sync, archive
+      // Core profile: propose, explore, apply, update, split, sync, archive
       const coreCommandNames = [
         'opsx/propose.md',
         'opsx/explore.md',
         'opsx/apply.md',
         'opsx/update.md',
+        'opsx/split.md',
         'opsx/sync.md',
         'opsx/archive.md',
       ];
@@ -257,10 +259,11 @@ describe('InitCommand', () => {
           'openspec-explore',
           'openspec-apply-change',
           'openspec-update-change',
+          'openspec-split-change',
           'openspec-sync-specs',
           'openspec-archive-change',
         ].map((name) => path.join(testDir, '.claude', 'skills', name, 'SKILL.md')),
-        ...['propose', 'explore', 'apply', 'update', 'sync', 'archive'].map((name) =>
+        ...['propose', 'explore', 'apply', 'update', 'split', 'sync', 'archive'].map((name) =>
           path.join(testDir, '.claude', 'commands', 'opsx', `${name}.md`)
         ),
       ];
@@ -1674,6 +1677,14 @@ describe('InitCommand - profile and detection features', () => {
     expect(updateSkillContent).not.toContain('/opsx:');
     expect(updateSkillContent).not.toContain('/opsx-');
     expect(updateSkillContent).toContain('/openspec-');
+
+    const splitSkillContent = await fs.readFile(
+      path.join(testDir, '.claude', 'skills', 'openspec-split-change', 'SKILL.md'),
+      'utf-8'
+    );
+    expect(splitSkillContent).not.toContain('/opsx:');
+    expect(splitSkillContent).not.toContain('/opsx-');
+    expect(splitSkillContent).toContain('/openspec-');
   });
 
   it('should use skill references for adapterless tools under default delivery (#1155)', async () => {

@@ -30,12 +30,13 @@ describe('tool-detection', () => {
 
   describe('SKILL_NAMES', () => {
     it('should contain all skill names matching COMMAND_IDS', () => {
-      expect(SKILL_NAMES).toHaveLength(12);
+      expect(SKILL_NAMES).toHaveLength(13);
       expect(SKILL_NAMES).toContain('openspec-explore');
       expect(SKILL_NAMES).toContain('openspec-new-change');
       expect(SKILL_NAMES).toContain('openspec-continue-change');
       expect(SKILL_NAMES).toContain('openspec-apply-change');
       expect(SKILL_NAMES).toContain('openspec-update-change');
+      expect(SKILL_NAMES).toContain('openspec-split-change');
       expect(SKILL_NAMES).toContain('openspec-ff-change');
       expect(SKILL_NAMES).toContain('openspec-sync-specs');
       expect(SKILL_NAMES).toContain('openspec-archive-change');
@@ -370,7 +371,7 @@ Content here
 
       const { version } = await import('../../../package.json');
       const status = getToolVersionStatus(testDir, 'claude', version, {
-        workflows: ['propose', 'explore', 'apply', 'update', 'sync', 'archive'],
+        workflows: ['propose', 'explore', 'apply', 'update', 'split', 'sync', 'archive'],
       });
 
       expect(status.configured).toBe(true);
@@ -394,7 +395,7 @@ Content here
       await initCommand.execute(testDir);
 
       const { version } = await import('../../../package.json');
-      const coreWorkflows = ['propose', 'explore', 'apply', 'update', 'sync', 'archive'];
+      const coreWorkflows = ['propose', 'explore', 'apply', 'update', 'split', 'sync', 'archive'];
 
       // cline's commands live outside its skillsDir (.cline), so a commands-only
       // install leaves that directory absent entirely.
@@ -438,7 +439,7 @@ Content here
       // The core set is a superset of this profile, so comparing against it must
       // report drift — the fingerprint has to use the workflows actually selected.
       const againstCore = getToolVersionStatus(testDir, 'claude', version, {
-        workflows: ['propose', 'explore', 'apply', 'update', 'sync', 'archive'],
+        workflows: ['propose', 'explore', 'apply', 'update', 'split', 'sync', 'archive'],
       });
       expect(againstCore.needsUpdate).toBe(true);
     });
@@ -462,7 +463,7 @@ Content here
 
       const { version } = await import('../../../package.json');
       const status = getToolVersionStatus(testDir, 'claude', version, {
-        workflows: ['propose', 'explore', 'apply', 'update', 'sync', 'archive'],
+        workflows: ['propose', 'explore', 'apply', 'update', 'split', 'sync', 'archive'],
       });
 
       expect(status.generatedByVersion).toBe(version);
@@ -483,7 +484,7 @@ Content here
 
       const { version } = await import('../../../package.json');
       const status = getToolVersionStatus(testDir, 'claude', version, {
-        workflows: ['propose', 'explore', 'apply', 'update', 'sync', 'archive'],
+        workflows: ['propose', 'explore', 'apply', 'update', 'split', 'sync', 'archive'],
       });
 
       expect(status.configured).toBe(true);
@@ -506,7 +507,7 @@ Content here
 
       const { version } = await import('../../../package.json');
       const status = getToolVersionStatus(testDir, 'claude', version, {
-        workflows: ['propose', 'explore', 'apply', 'update', 'sync', 'archive'],
+        workflows: ['propose', 'explore', 'apply', 'update', 'split', 'sync', 'archive'],
       });
 
       expect(status.configured).toBe(true);
@@ -528,7 +529,7 @@ Content here
 
       const { version } = await import('../../../package.json');
       const status = getToolVersionStatus(testDir, 'claude', version, {
-        workflows: ['propose', 'explore', 'apply', 'update', 'sync', 'archive'],
+        workflows: ['propose', 'explore', 'apply', 'update', 'split', 'sync', 'archive'],
       });
 
       expect(status.configured).toBe(true);

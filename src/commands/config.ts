@@ -69,6 +69,10 @@ export const WORKFLOW_PROMPT_META: Record<string, WorkflowPromptMeta> = {
     name: 'Update change',
     description: 'Revise the planning artifacts of an existing change',
   },
+  split: {
+    name: 'Split change',
+    description: 'Split one change into independently applyable changes',
+  },
   ff: {
     name: 'Fast-forward',
     description: 'Run a faster implementation workflow',

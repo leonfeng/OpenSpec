@@ -537,6 +537,7 @@ For full command details and options, see [Commands](commands.md).
 | `/opsx:continue` | Create next artifact | Expanded mode, step-by-step artifact creation |
 | `/opsx:ff` | Create all planning artifacts | Expanded mode, clear scope |
 | `/opsx:apply` | Implement tasks | Ready to write code |
+| `/opsx:split` | Split into independently applyable changes | One change has several capabilities or layers |
 | `/opsx:verify` | Validate implementation | Expanded mode, before archiving |
 | `/opsx:sync` | Merge delta specs | Expanded mode, optional |
 | `/opsx:archive` | Complete the change | All work finished |

@@ -19,6 +19,7 @@ for your tool. The files OpenSpec generates already use the right form.
 | `/opsx:explore` | Think through ideas before committing to a change |
 | `/opsx:apply` | Implement tasks from the change |
 | `/opsx:update` | Revise a change's planning artifacts and keep them coherent |
+| `/opsx:split` | Split one change into independently applyable changes |
 | `/opsx:sync` | Merge delta specs into main specs |
 | `/opsx:archive` | Archive a completed change |
 
@@ -369,6 +370,56 @@ AI:  Reading add-dark-mode artifacts...
 - It won't create missing artifacts - that's `/opsx:continue`
 - If the change was already implemented, follow up with `/opsx:apply` so the code matches the revised plan
 - If your revision changes the *intent* of the change, start fresh with a new change instead (see [When to Update vs. Start Fresh](opsx.md#when-to-update-vs-start-fresh))
+
+---
+
+### `/opsx:split`
+
+Split one change into multiple independently applyable changes. Planning artifacts only - it never edits code.
+
+**Syntax:**
+
+```text
+/opsx:split [change-name]
+```
+
+**Arguments:**
+
+| Argument | Required | Description |
+|----------|----------|-------------|
+| `change-name` | No | Which change to split (inferred from context if not provided) |
+
+**What it does:**
+
+- Reads the source change's artifacts via `openspec status --change <name> --json`
+- Proposes a slice plan (one independently applyable change per capability or layer) and waits for confirmation
+- Creates each child change with only that slice's proposal, specs, design, and tasks
+- Archives the source with `--skip-specs` so it is not left as an apply target
+- Stops. Apply the first child with `/opsx:apply <child>` — do not apply the original change
+
+**Example:**
+
+```text
+You: /opsx:split feat-user-account-deletion
+
+AI:  Using change: feat-user-account-deletion
+
+     This change has four capabilities. `/opsx:apply` would implement all of them.
+
+     Proposed slices (apply in this order):
+     1. feat-user-account-deletion-api
+     2. feat-user-account-deletion-client
+     3. feat-user-account-deletion-cli
+     4. feat-user-account-deletion-web
+
+     Archive the source without merging specs. Confirm?
+```
+
+**Tips:**
+
+- Specs are not independently applyable. Splitting spec files inside one change does not change what `/opsx:apply` does
+- If you asked to "split into sub-specs," use this command instead
+- Each child should be small enough to apply in one session
 
 ---
 

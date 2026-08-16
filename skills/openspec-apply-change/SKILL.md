@@ -26,6 +26,10 @@ Implement tasks from an OpenSpec change.
 
    Always announce: "Using change: <name>" and how to override (e.g., `/openspec-apply-change <other>`).
 
+   **Change, not spec:** `/openspec-apply-change` implements a **change** — every remaining task in that change. Specs/capabilities are not independently applyable. If the user named a spec or capability, or asked to implement only one slice of a multi-capability change:
+   - If an active change with that exact name exists, use it.
+   - Otherwise do **not** resolve the name to a parent change and implement everything. Stop, list matching changes, and suggest `/openspec-split-change` to turn the parent into independently applyable changes. If `/openspec-split-change` is not installed, explain that independently applyable slices require separate changes and offer `/openspec-propose` for each slice.
+
 2. **Check status to understand the schema**
    ```bash
    openspec status --change "<name>" --json
@@ -169,6 +173,7 @@ What would you like to do?
 
 **Guardrails**
 - Keep going through tasks until done or blocked
+- Apply implements a change, not a spec: if the user named a capability or asked for one slice, stop and suggest `/openspec-split-change` instead of implementing the parent change
 - Always read context files before starting (from the apply instructions output)
 - If task is ambiguous, pause and ask before implementing
 - If implementation reveals issues, pause and suggest artifact updates

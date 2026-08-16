@@ -42,6 +42,7 @@ export const COMMAND_IDS = [
   'continue',
   'apply',
   'update',
+  'split',
   'ff',
   'sync',
   'archive',

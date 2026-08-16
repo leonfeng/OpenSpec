@@ -85,7 +85,7 @@ Don't worry about getting it perfect. We're still learning what works best here,
 
 Both `openspec init` and `openspec update` detect legacy files and guide you through the same cleanup process. Use whichever fits your situation:
 
-- New installs default to profile `core` (`propose`, `explore`, `apply`, `update`, `sync`, `archive`).
+- New installs default to profile `core` (`propose`, `explore`, `apply`, `update`, `split`, `sync`, `archive`).
 - Migrated installs preserve your previously installed workflows by writing a `custom` profile when needed.
 
 ### Using `openspec init`
