@@ -44,6 +44,14 @@ Our philosophy:
 
 <!-- TODO: Add GIF demo of /opsx:propose → /opsx:archive workflow -->
 
+## Differences from upstream
+
+This is a fork of [Fission-AI/OpenSpec](https://github.com/Fission-AI/OpenSpec). It tracks upstream `main` and currently differs in two places:
+
+**`/opsx:split`** — Specs (capabilities) are not apply units. `/opsx:apply` still implements every remaining task in a change, so splitting specs inside the same change does not give you a smaller apply. This fork adds `/opsx:split` (core profile) to turn one fat change into independently applyable child changes. If you name a spec on apply, it stops and suggests split instead of implementing everything. See [Commands](docs/commands.md#opsxsplit).
+
+**Local-model workflow loops** — Upstream skills assume a strong hosted model will infer the next step. This fork states the contract so weaker/local coding models do not loop: apply requires a tasks-file checkbox edit as the next tool call after every implementation write; archive merges delta specs inline and moves with `openspec archive --skip-specs --yes` instead of naming `/opsx:sync` or using agent `mkdir`/`mv`/`rm`; propose no longer auto-starts apply or explores the codebase; explore and apply treat a repeated shell command as a loop, and explore must not implement.
+
 ## See it in action
 
 ```text
