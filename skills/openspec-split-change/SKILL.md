@@ -1,6 +1,6 @@
 ---
 name: openspec-split-change
-description: Split one OpenSpec change into multiple independently applyable changes. Use when a change has several capabilities or layers, the user asked to apply only one spec or slice, they asked to split a spec into sub-specs, or apply would otherwise implement everything in one go. Planning artifacts only — never edits code.
+description: Split one OpenSpec change into multiple independently applyable changes. Use when a change has several capabilities or layers, the user asked to apply only one spec or slice, they asked to split a spec into sub-specs, apply would otherwise implement everything in one go, or local agentic apply on vLLM would loop. Planning artifacts only — never edits code.
 allowed-tools: Bash(openspec:*)
 license: MIT
 compatibility: Requires openspec CLI.
@@ -55,9 +55,22 @@ Split one OpenSpec change into multiple independently applyable changes.
    - The user asked to apply only one spec, capability, or slice
    - The user asked to split a spec into sub-specs
    - The task list is too large for one apply session
+   - **Local agentic apply** would struggle (see below)
+
+   **Local agentic apply (vLLM / BigBang / OpenCode)**
+
+   On local models with tight concurrency (e.g. vLLM `max-num-seqs=2`, parent + child streaming), **default to splitting** when any of these is true — even if the change feels cohesive:
+   - `tasks.md` has **more than 6** unchecked tasks
+   - The change spans **backend Python + HTML/templates + e2e tests**
+   - Prior apply sessions **looped** (read dumps, edit retries, `git diff`, pytest reruns)
+   - The user applies with BigBang or another local reasoning model via OpenCode
+
+   Do **not** tell the user to keep one monolithic change "for simplicity" in this environment. Smaller slices finish; large monolithic applies loop.
+
+   Typical slice axis (adjust to the source change): backend/security → templates/HTMX → e2e coverage last.
 
    Do **not** split when:
-   - One capability and a small task list — say so and stop
+   - One capability and a small task list **and** the user is not on constrained local agentic apply — say so and stop
    - The user wants multiple specs but one apply (keep one change)
    - Every task is already complete — splitting will not change what apply does
    - The request changes intent rather than batching implementation — that is a new change, not a split
@@ -117,11 +130,14 @@ After a completed split, show:
 ...
 
 Apply the first slice with `/openspec-apply-change <child-a>`. Do not apply the whole original change.
+
+On local vLLM, apply slices **one at a time**. Do not spawn multiple apply subagents concurrently.
 ```
 
 **Guardrails**
 - Planning artifacts only — NEVER edit implementation code
 - NEVER start `/openspec-apply-change` from this workflow
+- NEVER recommend monolithic apply on local vLLM when the change spans backend + templates + e2e or has more than six unchecked tasks
 - NEVER only split spec files inside the source change — that is not independently applyable
 - NEVER copy the entire source into every child
 - NEVER archive the source with spec merge (children own those deltas)

@@ -81,4 +81,14 @@ describe('split-change templates', () => {
       expect(body, label).toContain('Apply the first slice with `/opsx:apply <child-a>`');
     }
   });
+
+  it('defaults to splitting for constrained local agentic apply', () => {
+    for (const [label, body] of bodies) {
+      expect(body, label).toContain('Local agentic apply (vLLM / BigBang / OpenCode)');
+      expect(body, label).toContain('max-num-seqs=2');
+      expect(body, label).toContain('Do **not** tell the user to keep one monolithic change');
+      expect(body, label).toContain('apply slices **one at a time**');
+      expect(body, label).toContain('NEVER recommend monolithic apply on local vLLM');
+    }
+  });
 });
